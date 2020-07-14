@@ -243,7 +243,7 @@ func GetFMSData() ([]ECLSSfms, error) {
 func GetEEDisturbances() ([]EEDisturbance, error) {
 	var unit EEDisturbance
 	uList := make([]EEDisturbance, 0)
-	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id), t.sender_x,
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id, t.sender_x,
 												t.sender_y, t.sender_z, t.disturbance
 												FROM ee_disturbance_detection
 												t JOIN(SELECT MAX(timestamp) AS timestamp FROM ee_disturbance_detection
@@ -264,7 +264,7 @@ func GetEEDisturbances() ([]EEDisturbance, error) {
 func GetHMCtrlDecisions() ([]HMCtrlDecision, error) {
 	var unit HMCtrlDecision
 	uList := make([]HMCtrlDecision, 0)
-	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id),
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id,
 		 										t.command
 												FROM HM_CTRLDECSN
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -327,7 +327,7 @@ func GetHumans() ([]Human, error) {
 func GetHumanSetPts() ([]HumanSetPt, error) {
 	var unit HumanSetPt
 	uList := make([]HumanSetPt, 0)
-	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.RECEIVER_ID),
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.RECEIVER_ID,
 		 										t.SET_POINT FROM HUMAN_SETPTCTRL
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM HUMAN_SETPTCTRL GROUP BY sender_id) max
