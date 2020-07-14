@@ -16,7 +16,7 @@ var (
 )
 
 func init() {
-	dbAddr := fmt.Sprintf("root:%s@tcp(127.0.0.1:3306)/mcvt", os.Getenv("DBPasswd"))
+	dbAddr := fmt.Sprintf("server:%s@tcp(99.113.165.192:3306)/mcvt", os.Getenv("DBPasswd"))
 	db, _ = sql.Open("mysql", dbAddr)
 	for {
 		if err := db.Ping(); err != nil {
