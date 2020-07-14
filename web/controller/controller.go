@@ -81,7 +81,7 @@ func GetHMCtrlDecisions(ctx *sweetygo.Context) error {
 	}
 	return ctx.JSON(200, 1, "success", decisionsList)
 }
-
+/*
 // GetHMThermFlux handles GET /api/healthmanagement/thermflux
 func GetHMThermFlux(ctx *sweetygo.Context) error {
 	tfList, err := model.GetHMThermFlux()
@@ -93,7 +93,7 @@ func GetHMThermFlux(ctx *sweetygo.Context) error {
 	}
 	return ctx.JSON(200, 1, "success", tfList)
 }
-
+*/
 // GetHumans handles GET /api/humans
 func GetHumans(ctx *sweetygo.Context) error {
 	humans, err := model.GetHumans()
@@ -213,7 +213,7 @@ func GetSSDispSensors(ctx *sweetygo.Context) error {
 	}
 	return ctx.JSON(200, 1, "success", disps)
 }
-
+/*
 // GetSSCameras handles GET /api/structuralsystem/visualassessment
 func GetSSCameras(ctx *sweetygo.Context) error {
 	cams, err := model.GetSSCameras()
@@ -225,7 +225,7 @@ func GetSSCameras(ctx *sweetygo.Context) error {
 	}
 	return ctx.JSON(200, 1, "success", cams)
 }
-
+*/
 // GetSSDamageInfo handles GET /api/structuralsystem/damageinfo
 func GetSSDamageInfo(ctx *sweetygo.Context) error {
 	dList, err := model.GetSSDamageInfo()
