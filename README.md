@@ -16,9 +16,9 @@ You also need to install the necessary git repositories.
 1. Set your **$GOPATH** environment variable to the location of your **Go/** folder
 1. Add **$GOPATH/bin** to your **PATH**
 1. In the **$GOPATH/src/** folder, make a directory called **github.com**
-  1. Inside the **github.com** folder make a folder called **AmyangXYZ** and inside this folder make a folder called **sweetygo** and execute this statement ```git pull https://github.com/AmyangXYZ/sweetygo.git ```
-  1. Inside **github.com** make another folder called **dgrijalva** and inside this folder make a folder called **jwt-go** and execute this statement ```git pull https://github.com/dgrijalva/jwt-go.git ```
-  1. Inside **github.com** make another folder called **go-sql-driver** and inside this folder make a folder called **mysql** and execute this statement ```git pull https://github.com/go-sql-driver/mysql.git ```
+    1. Inside the **github.com** folder make a folder called **AmyangXYZ** and inside this folder make a folder called **sweetygo** and execute this statement ```git pull https://github.com/AmyangXYZ/sweetygo.git ```
+    1. Inside **github.com** make another folder called **dgrijalva** and inside this folder make a folder called **jwt-go** and execute this statement ```git pull https://github.com/dgrijalva/jwt-go.git ```
+    1. Inside **github.com** make another folder called **go-sql-driver** and inside this folder make a folder called **mysql** and execute this statement ```git pull https://github.com/go-sql-driver/mysql.git ```
 Do a git pull to install a copy of the NASA RETHi repository on the local machine
 Build using the command ```$ go build``` in the ~/web folder
 This will create an executable file called *web* (Linux) or *web.exe* (Windows)
