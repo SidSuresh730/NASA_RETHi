@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"time"
   "math/rand"
+  "strings"
   //"../web/model"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -38,25 +39,26 @@ var (
   intervention_list = [3]string{"In0", "In1", "In2"}
   robot_status = [3]string{"Active", "Standby", "Sleep"}
   robot_health = [3]string{"Full Func", "Some Damage", "Critical"}
-  ss_sensor_type = [8]string{"Strain", "Accl", "Temp", "Disp", "Visual", "Damage", "ThermFlux", "Pressure"}
-  id_list = populateList80()
+  subsystem_id_list = [9]string{"A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"}
+  component_id_list = [8]string{"11", "22", "33", "44", "55", "66", "77", "88"}
+  ss_sensor_type = [8]string{"Strain", "Accl", "Temp", "Disp", /*"Visual",*/ "Damage", "ThermFlux", "Pressure"}
+  id_list = populateList()
   //id_list = [21]int{0x1111, 0x2121, 0x3434, 0x4444, 0x5511, 0x1234, 0x12AA, 0x55AA, 0x567A, 0x5999, 0x9999, 0x5978, 0x7777, 0x8888, 0xAAAB, 0xACAB, 0xCCCC, 0xDEAD, 0xBEEF, 0xCADE, 0xCAFE}
 )
 func main() {
   //id_list = populateList80()
-  //generateSSData()
-  //generateECLSS()
-  generateDisturbance()
-  //generateCtrlDecsn()
-  //generateThermflux()
-  //generateHuman()
+  generateSSData()
+   //go generateECLSS()
+   //generateDisturbance()
+  //go generateCtrlDecsn()
+  //go generateHuman()
   //generateHumanSetPt()
   //generateIEData()
   //generateInventory()
   //go generatePwrConsumers()
-  //go generatePwrGenerators()
-  //go generatePwrHealthStates()
-  //go generatePwrStorage()
+  ///generatePwrGenerators()
+  //generatePwrHealthStates()
+  //generatePwrStorage()
   //generateRobotInterventions()
   //generateRobots()
 
@@ -86,10 +88,10 @@ func init() {
 	db.SetMaxOpenConns(5)
 }
 
-func populateList80() []int {
-  lst := make([]int, 0)
-  for i:=0; i<80; i++ {
-    lst = append(lst, i*0x0333)
+func populateList() []uint64 {
+  lst := make([]uint64, 0)
+  for i:=0; i<16; i++ {
+    lst = append(lst, uint64(i*16))
   }
   return lst
 }
@@ -104,52 +106,62 @@ func generateECLSS() {
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
     id := id_list[rand.Intn(len(id_list))]
-    subsys := eclss_type[int(float64(id)/float64(0xFFFF)*float64(len(eclss_type)))]
-    //subsys := eclss_type[rand.Intn(len(eclss_type))]
+    //subsys := eclss_type[int(float64(id)/float64(0xFF)*float64(len(eclss_type)))]
+    subsys := eclss_type[rand.Intn(len(eclss_type))]
     switch (subsys) {
       case "WRS":
-        stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE, HEALTH_STATUS, OPERATION_STATUS, HUMIDITY, WATER_LEVEL) VALUES(?,?,?,?,?,?,?,?)`)
+        total_id := strings.ToUpper("11-" + strconv.FormatUint(id, 16))
+        stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE,
+                                HEALTH_STATUS, OPERATION_STATUS, POWER_CONSUME, HUMIDITY,
+                                WATER_LEVEL) VALUES(?,?,?,?,?,?,?,?,?)`)
         if err != nil {
       		Error.Println(stmt, err)
       	}
       	defer stmt.Close()
-        _, err = stmt.Exec(datetime, timestamp, id, subsys,
-        eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))],
+        _, err = stmt.Exec(datetime, timestamp, total_id, subsys,
+        eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))], 500.0*(rand.Float64()),
         500.0*(rand.Float64()), 500.0*(rand.Float64()))
         if err != nil {
       		Error.Println(stmt, err)
       	}
       case "OGS":
-        stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE, HEALTH_STATUS, OPERATION_STATUS, OXYGEN_LEVEL, CO2_LEVEL) VALUES(?,?,?,?,?,?,?,?)`)
+        total_id := strings.ToUpper("22-" + strconv.FormatUint(id, 16))
+        stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE,
+                                HEALTH_STATUS, OPERATION_STATUS, POWER_CONSUME, OXYGEN_LEVEL,
+                                CO2_LEVEL) VALUES(?,?,?,?,?,?,?,?,?)`)
         if err != nil {
       		Error.Println(stmt, err)
       	}
       	defer stmt.Close()
-        _, err = stmt.Exec(datetime, timestamp, id, subsys,
-        eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))],
+        _, err = stmt.Exec(datetime, timestamp, total_id, subsys,
+        eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))], 500.0*(rand.Float64()),
         500.0*(rand.Float64()), 500.0*(rand.Float64()))
         if err != nil {
       		Error.Println(stmt, err)
       	}
       case "FMS":
-          stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE, HEALTH_STATUS, OPERATION_STATUS, REFRIGERATOR_TEMP, MOISTURE, CIRCULATION) VALUES(?,?,?,?,?,?,?,?,?)`)
+          total_id := strings.ToUpper("33-" + strconv.FormatUint(id, 16))
+          stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE,
+                                  HEALTH_STATUS, OPERATION_STATUS, POWER_CONSUME, REFRIGERATOR_TEMP,
+                                  MOISTURE, CIRCULATION) VALUES(?,?,?,?,?,?,?,?,?,?)`)
           if err != nil {
         		Error.Println(stmt, err)
         	}
         	defer stmt.Close()
-          _, err = stmt.Exec(datetime, timestamp, id, subsys,
-          eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))],
+          _, err = stmt.Exec(datetime, timestamp, total_id, subsys,
+          eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))], 500.0*(rand.Float64()),
           500.0*(rand.Float64()), 500.0*(rand.Float64()), 500.0*(rand.Float64()))
           if err != nil {
         		Error.Println(stmt, err)
         	}
       default:
+        total_id := strings.ToUpper("A3-33" + strconv.FormatUint(id, 16))
         stmt, err := db.Prepare(`INSERT INTO ECLSS_RT_OPERATION (DATETIME, TIMESTAMP, ID, TYPE, HEALTH_STATUS, OPERATION_STATUS, REFRIGERATOR_TEMP, MOISTURE, CIRCULATION) VALUES(?,?,?,?,?,?,?,?,?)`)
         if err != nil {
           Error.Println(stmt, err)
         }
         defer stmt.Close()
-        _, err = stmt.Exec(datetime, timestamp, id, "FMS",
+        _, err = stmt.Exec(datetime, timestamp, total_id, "FMS",
         eclss_health[rand.Intn(len(eclss_health))], eclss_operation[rand.Intn(len(eclss_operation))],
         500.0*(rand.Float64()), 500.0*(rand.Float64()), 500.0*(rand.Float64()))
         if err != nil {
@@ -168,12 +180,14 @@ func generateDisturbance() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
+    sender_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    receiver_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     stmt, err := db.Prepare(`INSERT INTO EE_DISTURBANCE_DETECTION (DATETIME, TIMESTAMP, SENDER_ID, RECEIVER_ID, SENDER_X, SENDER_Y, SENDER_Z, DISTURBANCE) VALUES(?,?,?,?,?,?,?,?)`)
     if err != nil {
       Error.Println(stmt, err)
     }
     defer stmt.Close()
-    _, err = stmt.Exec(datetime, timestamp, id_list[rand.Intn(len(id_list))], id_list[rand.Intn(len(id_list))],
+    _, err = stmt.Exec(datetime, timestamp, sender_id, receiver_id,
     50*(rand.Float64()), 50*(rand.Float64()), 50*(rand.Float64()),
      ee_disturbance[rand.Intn(len(ee_disturbance))])
     if err != nil {
@@ -191,21 +205,21 @@ func generateCtrlDecsn() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    id1 := id_list[rand.Intn(len(id_list))]
-    id2 := id_list[rand.Intn(len(id_list))]
+    sender_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    receiver_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     stmt, err := db.Prepare(`INSERT INTO HM_CTRLDECSN (DATETIME, TIMESTAMP, SENDER_ID, RECEIVER_ID,  COMMAND) VALUES(?,?,?,?,?)`)
     if err != nil {
       Error.Println(stmt, err)
     }
     defer stmt.Close()
-    _, err = stmt.Exec(datetime, timestamp, id1, id2,
+    _, err = stmt.Exec(datetime, timestamp, sender_id, receiver_id,
      hm_command[rand.Intn(len(hm_command))])
     if err != nil {
       Error.Println(stmt, err)
     }
   }
 }
-
+/*
 func generateThermflux() {
   _, err := db.Exec("DELETE FROM HM_RT_THERMFLUX WHERE 1")
   if err != nil {
@@ -228,7 +242,7 @@ func generateThermflux() {
     }
   }
 }
-
+*/
 func generateHuman() {
   _, err := db.Exec("DELETE FROM HUMAN_RT_UPDATES WHERE 1")
   if err != nil {
@@ -238,12 +252,14 @@ func generateHuman() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
+    human_id := strings.ToUpper(component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    //receiver_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     stmt, err := db.Prepare(`INSERT INTO HUMAN_RT_UPDATES (DATETIME, TIMESTAMP, HUMAN_ID, HUMAN_STATUS, HR, BP, O2_SAT) VALUES(?,?,?,?,?,?,?)`)
     if err != nil {
       Error.Println(stmt, err)
     }
     defer stmt.Close()
-    _, err = stmt.Exec(datetime, timestamp, id_list[rand.Intn(len(id_list))], human_status[rand.Intn(len(human_status))],
+    _, err = stmt.Exec(datetime, timestamp, human_id, human_status[rand.Intn(len(human_status))],
     100.0*(rand.Float64()), 100.0*(rand.Float64()), 100.0*(rand.Float64()))
     if err != nil {
       Error.Println(stmt, err)
@@ -260,12 +276,14 @@ func generateHumanSetPt() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
+    human_id := strings.ToUpper("A7-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    receiver_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     stmt, err := db.Prepare(`INSERT INTO HUMAN_SETPTCTRL (DATETIME, TIMESTAMP, SENDER_ID, RECEIVER_ID,  SET_POINT) VALUES(?,?,?,?,?)`)
     if err != nil {
       Error.Println(stmt, err)
     }
     defer stmt.Close()
-    _, err = stmt.Exec(datetime, timestamp, id_list[rand.Intn(len(id_list))], id_list[rand.Intn(len(id_list))],
+    _, err = stmt.Exec(datetime, timestamp, human_id, receiver_id,
      50*rand.Float64())
     if err != nil {
       Error.Println(stmt, err)
@@ -282,9 +300,12 @@ func generateIEData() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    //id_list := populateList80();
-    id := id_list[rand.Intn(len(id_list))]
-    subsys := ie_sensor_type[int(float64(id)/float64(0xFFFF)*float64(len(ie_sensor_type)))]
+    id := strings.ToUpper(component_id_list[rand.Intn(3)]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    char, e := strconv.Atoi(id[0:1])
+    if e != nil {
+      Error.Println(char, e)
+    }
+    subsys := ie_sensor_type[char%3]
       stmt, err := db.Prepare(`INSERT INTO IE_RT_SENSORS (DATETIME, TIMESTAMP, SENSOR_ID, SENSOR_STATUS, SENSOR_POWER_CONSUME, SENSOR_X, SENSOR_Y, SENSOR_Z,
         SENSOR_TYPE, VALUE) VALUES(?,?,?,?,?,?,?,?,?,?)`)
       if err != nil {
@@ -309,7 +330,7 @@ func generateInventory() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    item_id := inventory_item_list[rand.Intn(len(inventory_item_list))]
+    item_id := strings.ToUpper(component_id_list[rand.Intn(3)]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     quantity := 50*rand.Float64()
     restock := restock_order[rand.Intn(len(restock_order))]
     stmt, err := db.Prepare(`INSERT INTO INVENTORY (DATETIME, TIMESTAMP, ITEM_ID, QUANTITY, RESTOCK_ORDER) VALUES(?,?,?,?,?)`)
@@ -333,7 +354,7 @@ func generatePwrConsumers() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    item_id := id_list[rand.Intn(len(id_list))]
+    item_id := strings.ToUpper("44-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     power_consumption := 50*rand.Float64()
     stmt, err := db.Prepare(`INSERT INTO PWR_CONSUMPTION (DATETIME, TIMESTAMP, CONSUMER_ID, POWER_CONS) VALUES(?,?,?,?)`)
     if err != nil {
@@ -356,7 +377,8 @@ func generatePwrGenerators() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    item_id := id_list[rand.Intn(len(id_list))]
+    item_id := strings.ToUpper("11-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+
     status := solar_panel_status[rand.Intn(len(solar_panel_status))]
     power_gen := 50.0*rand.Float64()
     heat_gen := 50.0*rand.Float64()
@@ -386,7 +408,7 @@ func generatePwrHealthStates() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    item_id := id_list[rand.Intn(len(id_list))]
+    item_id := strings.ToUpper("22-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     status := health_state[rand.Intn(len(health_state))]
     stmt, err := db.Prepare(`INSERT INTO PWR_HEALTHSTATE (DATETIME, TIMESTAMP, OPERATIONUNIT_ID, OPERATIONUNIT_HEALTHSTATE) VALUES(?,?,?,?)`)
     if err != nil {
@@ -409,7 +431,7 @@ func generatePwrStorage() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    item_id := id_list[rand.Intn(len(id_list))]
+    item_id := strings.ToUpper("33-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     status := battery_status[rand.Intn(len(battery_status))]
     efficiency := 100*rand.Float64()
     percentage := 100.0*rand.Float64()
@@ -435,15 +457,15 @@ func generateRobotInterventions() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    sender := id_list[rand.Intn(len(id_list))]
-    receiver := id_list[rand.Intn(len(id_list))]
+    sender_id := strings.ToUpper("A5-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    receiver_id := strings.ToUpper(subsystem_id_list[rand.Intn(len(subsystem_id_list))]+"-"+component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     intervention := intervention_list[rand.Intn(len(intervention_list))]
     stmt, err := db.Prepare(`INSERT INTO ROBOT_INTERVENTIONCTRL (DATETIME, TIMESTAMP, SENDER_ID, RECEIVER_ID, INTERVENTION) VALUES(?,?,?,?,?)`)
     if err != nil {
       Error.Println(stmt, err)
     }
     defer stmt.Close()
-    _, err = stmt.Exec(datetime, timestamp, sender, receiver, intervention)
+    _, err = stmt.Exec(datetime, timestamp, sender_id, receiver_id, intervention)
     if err != nil {
       Error.Println(stmt, err)
     }
@@ -459,7 +481,7 @@ func generateRobots() {
     t := time.Now()
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
-    id := id_list[rand.Intn(len(id_list))]
+    id := strings.ToUpper(component_id_list[rand.Intn(len(component_id_list))]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
     status := robot_status[rand.Intn(len(robot_status))]
     health := robot_health[rand.Intn(len(robot_health))]
     battery := 100.0*rand.Float64()
@@ -485,8 +507,12 @@ func generateSSData() {
     timestamp := t.UnixNano() / 1e6
     datetime := t.Truncate(time.Second).Local()
     //id_list := populateList80()
-    sensor_id := id_list[rand.Intn(len(id_list))]
-    subsys := ss_sensor_type[int(float64(sensor_id)/float64(0xFFFF)*float64(len(ss_sensor_type)))]
+    sensor_id := strings.ToUpper(component_id_list[rand.Intn(7)]+"-"+strconv.FormatUint(id_list[rand.Intn(len(id_list))],16))
+    char, e := strconv.Atoi(sensor_id[0:1])
+    if e != nil {
+      Error.Println(char, e)
+    }
+    subsys := ss_sensor_type[char%7]
     //subsys := ss_sensor_type[rand.Intn(len(ss_sensor_type))]
     status := sensor_status_list[rand.Intn(len(sensor_status_list))]
     consume := 1000.00*rand.Float64()

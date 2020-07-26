@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"time"
-	//"strconv"
-	//"strings"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -16,7 +14,7 @@ var (
 )
 
 func init() {
-	dbAddr := fmt.Sprintf("server:%s@tcp(99.113.165.192:3306)/mcvt", os.Getenv("DBPasswd"))
+	dbAddr := fmt.Sprintf("root:%s@tcp(127.0.0.1:3306)/mcvt", os.Getenv("DBPasswd"))
 	db, _ = sql.Open("mysql", dbAddr)
 	for {
 		if err := db.Ping(); err != nil {
@@ -30,125 +28,13 @@ func init() {
 	// https://github.com/go-sql-driver/mysql/issues/674
 	db.SetMaxIdleConns(0)
 }
-/*
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Temperature 			int 		`json:"temperature"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Pressure 					int 		`json:"pressure"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Humidity 					int 		`json:"humidity"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Strain 						float64	`json:"strain"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Acceleration			struct {
-		X float64 `json:"X"`
-		Y	float64	`json:"Y"`
-		Z float64 `json:"Z"`
-	} `json:"acceleration"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Displacement			struct {
-		X float64 `json:"X"`
-		Y	float64	`json:"Y"`
-		Z float64 `json:"Z"`
-	} `json:"displacement"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	Visual 						float64	`json:"visual"`
-}
-
-type Sensor struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64 	`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	DamageInfo 						float64	`json:"DamageInfo"`
-}
-*/
 
 type ECLSSwrs struct {
 	UnitID 						string 		`json:"unit_id"`
 	LastUpdate 				int64 	`json:"last_update"`
 	HealthStatus 			string 	`json:"health_status"`
 	OperationStatus 	string	`json:"operation_status"`
+	PowerConsumption	float64	`json:"power_consumption"`
 	Humidity					float64 `json:"humidity"`
 	WaterLevel				float64	`json:"water_level"`
 }
@@ -158,6 +44,7 @@ type ECLSSogs struct {
 	LastUpdate 				int64 	`json:"last_update"`
 	HealthStatus 			string 	`json:"health_status"`
 	OperationStatus 	string	`json:"operation_status"`
+	PowerConsumption	float64	`json:"power_consumption"`
 	OxygenLevel 			float64 `json:"oxygen_level"`
 	CO2Level					float64	`json:"co2_level"`
 }
@@ -167,6 +54,7 @@ type ECLSSfms struct {
 	LastUpdate 				int64 	`json:"last_update"`
 	HealthStatus 			string 	`json:"health_status"`
 	OperationStatus 	string	`json:"operation_status"`
+	PowerConsumption	float64	`json:"power_consumption"`
 	RefrigeratorTemp	float64 `json:"refrigerator_temp"`
 	Moisture 					float64	`json:"moisture"`
 	Circulation 			float64 `json:"circulation"`
@@ -185,26 +73,12 @@ type EEDisturbance struct {
 }
 
 type HMCtrlDecision struct {
-	//TimeStamp 				int 		`json:"time_stamp"`
 	SenderID 					string	`json:"sender_id"`
 	LastUpdate 				int64		`json:"last_update"`
 	ReceiverID 				string 	`json:"receiver_id"`
 	Command 		 			string 	`json:"command"`
 }
-/*
-type HMThermFlux struct {
-	SensorID 					int 		`json:"sensor_id"`
-	LastUpdate 				int64		`json:"last_update"`
-	SensorStatus 			string	`json:"sensor_status"`
-	PowerConsumption	float64	`json:"power_consumption"`
-	SensorPosition		struct {
-		X 	int 	`json:"X"`
-		Y		int		`json:"Y"`
-		Z		int 	`json:"Z"`
-	} `json:"position"`
-	ThermFlux					float64	`json:"thermflux"`
-}
-*/
+
 type Human struct {
 	HumanID 					string 		`json:"human_id"`
 	LastUpdate 				int64 	`json:"last_update"`
@@ -295,13 +169,17 @@ func GetWRSData() ([]ECLSSwrs, error) {
 	var unit ECLSSwrs
 	var rows *sql.Rows
 	uList := make([]ECLSSwrs, 0)
-	rows, err := db.Query(`SELECT HEX(t.id), t.timestamp, t.HEALTH_STATUS,
-		 										t.OPERATION_STATUS, t.HUMIDITY, t.WATER_LEVEL
+	rows, err := db.Query(`SELECT t.id, t.timestamp, t.HEALTH_STATUS,
+		 										t.OPERATION_STATUS, t.POWER_CONSUME, t.HUMIDITY, t.WATER_LEVEL
 												FROM ECLSS_RT_OPERATION
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
 												ON t.timestamp = max.timestamp
+<<<<<<< HEAD
 												WHERE TYPE='WRS'
+=======
+												WHERE TYPE = 'WRS'
+>>>>>>> 32dbc94085a1e4665159c318c47415bab41f22a3
 												ORDER BY t.id `)
 	if err != nil {
 		return uList, err
@@ -309,7 +187,8 @@ func GetWRSData() ([]ECLSSwrs, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus, &unit.Humidity, &unit.WaterLevel)
+		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus,
+			&unit.PowerConsumption, &unit.Humidity, &unit.WaterLevel)
 		uList = append(uList, unit)
 	}
 	return uList, nil
@@ -319,8 +198,8 @@ func GetOGSData() ([]ECLSSogs, error) {
 	var unit ECLSSogs
 	uList := make([]ECLSSogs, 0)
 
-	rows, err := db.Query(`SELECT HEX(t.id), t.timestamp, t.HEALTH_STATUS,
-		 										t.OPERATION_STATUS, t.OXYGEN_LEVEL, t.CO2_LEVEL
+	rows, err := db.Query(`SELECT t.id, t.timestamp, t.HEALTH_STATUS,
+		 										t.OPERATION_STATUS, t.POWER_CONSUME, t.OXYGEN_LEVEL, t.CO2_LEVEL
 												FROM ECLSS_RT_OPERATION
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
@@ -333,7 +212,8 @@ func GetOGSData() ([]ECLSSogs, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus, &unit.OxygenLevel, &unit.CO2Level)
+		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus,
+			&unit.PowerConsumption, &unit.OxygenLevel, &unit.CO2Level)
 		uList = append(uList, unit)
 	}
 	return uList, nil
@@ -343,8 +223,8 @@ func GetFMSData() ([]ECLSSfms, error) {
 	var unit ECLSSfms
 	uList := make([]ECLSSfms, 0)
 
-	rows, err := db.Query(`SELECT HEX(t.id), t.timestamp, t.HEALTH_STATUS,
-		 										t.OPERATION_STATUS, t.REFRIGERATOR_TEMP, t.MOISTURE, t.CIRCULATION
+	rows, err := db.Query(`SELECT t.id, t.timestamp, t.HEALTH_STATUS,
+		 										t.OPERATION_STATUS, t.POWER_CONSUME, t.REFRIGERATOR_TEMP, t.MOISTURE, t.CIRCULATION
 												FROM ECLSS_RT_OPERATION
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
@@ -357,7 +237,8 @@ func GetFMSData() ([]ECLSSfms, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus, &unit.RefrigeratorTemp, &unit.Moisture, &unit.Circulation)
+		rows.Scan(&unit.UnitID, &unit.LastUpdate, &unit.HealthStatus, &unit.OperationStatus,
+			&unit.PowerConsumption, &unit.RefrigeratorTemp, &unit.Moisture, &unit.Circulation)
 		uList = append(uList, unit)
 	}
 	return uList, nil
@@ -366,7 +247,7 @@ func GetFMSData() ([]ECLSSfms, error) {
 func GetEEDisturbances() ([]EEDisturbance, error) {
 	var unit EEDisturbance
 	uList := make([]EEDisturbance, 0)
-	rows, err := db.Query(`SELECT HEX(t.sender_id), t.timestamp, HEX(t.receiver_id), t.sender_x,
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id, t.sender_x,
 												t.sender_y, t.sender_z, t.disturbance
 												FROM ee_disturbance_detection
 												t JOIN(SELECT MAX(timestamp) AS timestamp FROM ee_disturbance_detection
@@ -387,7 +268,7 @@ func GetEEDisturbances() ([]EEDisturbance, error) {
 func GetHMCtrlDecisions() ([]HMCtrlDecision, error) {
 	var unit HMCtrlDecision
 	uList := make([]HMCtrlDecision, 0)
-	rows, err := db.Query(`SELECT HEX(t.sender_id), t.timestamp, HEX(t.receiver_id),
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.receiver_id,
 		 										t.command
 												FROM HM_CTRLDECSN
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -404,11 +285,11 @@ func GetHMCtrlDecisions() ([]HMCtrlDecision, error) {
 	}
 	return uList, nil
 }
-
+/*
 func GetHMThermFlux() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.sensor_id), t.timestamp, t.sensor_status,
+	rows, err := db.Query(`SELECT t.sensor_id, t.timestamp, t.sensor_status,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.value FROM HM_RT_THERMFLUX
 												t JOIN (SELECT MAX(timestamp) as timestamp
@@ -426,11 +307,11 @@ func GetHMThermFlux() ([]Sensor, error) {
 	}
 	return uList, nil
 }
-
+*/
 func GetHumans() ([]Human, error) {
 	var unit Human
 	uList := make([]Human, 0)
-	rows, err := db.Query(`SELECT HEX(t.human_id), t.timestamp, t.HUMAN_STATUS,
+	rows, err := db.Query(`SELECT t.human_id, t.timestamp, t.HUMAN_STATUS,
 		 										t.HR, t.BP, t.O2_SAT FROM HUMAN_RT_UPDATES
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM HUMAN_RT_UPDATES GROUP BY human_id) max
@@ -450,7 +331,7 @@ func GetHumans() ([]Human, error) {
 func GetHumanSetPts() ([]HumanSetPt, error) {
 	var unit HumanSetPt
 	uList := make([]HumanSetPt, 0)
-	rows, err := db.Query(`SELECT HEX(t.sender_id), t.timestamp, HEX(t.RECEIVER_ID),
+	rows, err := db.Query(`SELECT t.sender_id, t.timestamp, t.RECEIVER_ID,
 		 										t.SET_POINT FROM HUMAN_SETPTCTRL
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM HUMAN_SETPTCTRL GROUP BY sender_id) max
@@ -470,7 +351,7 @@ func GetHumanSetPts() ([]HumanSetPt, error) {
 func GetIETemperatureSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM IE_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -493,7 +374,7 @@ func GetIETemperatureSensors() ([]Sensor, error) {
 func GetSSTemperatureSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -516,7 +397,7 @@ func GetSSTemperatureSensors() ([]Sensor, error) {
 func GetIEPressureSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM IE_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -539,7 +420,7 @@ func GetIEPressureSensors() ([]Sensor, error) {
 func GetSSPressureSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -562,7 +443,7 @@ func GetSSPressureSensors() ([]Sensor, error) {
 func GetSSStrainSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -585,7 +466,7 @@ func GetSSStrainSensors() ([]Sensor, error) {
 func GetIEHumiditySensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM IE_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -608,7 +489,7 @@ func GetIEHumiditySensors() ([]Sensor, error) {
 func GetSSAcclSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -631,7 +512,7 @@ func GetSSAcclSensors() ([]Sensor, error) {
 func GetSSDispSensors() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -650,11 +531,11 @@ func GetSSDispSensors() ([]Sensor, error) {
 	}
 	return uList, nil
 }
-
+/*
 func GetSSCameras() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -673,11 +554,11 @@ func GetSSCameras() ([]Sensor, error) {
 	}
 	return uList, nil
 }
-
+*/
 func GetSSDamageInfo() ([]Sensor, error) {
 	var unit Sensor
 	uList := make([]Sensor, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENSOR_ID), t.timestamp, t.SENSOR_STATUS,
+	rows, err := db.Query(`SELECT t.SENSOR_id, t.timestamp, t.SENSOR_STATUS,
 		 										t.SENSOR_POWER_CONSUME, t.SENSOR_X, t.SENSOR_Y, t.SENSOR_Z,
 												t.VALUE FROM SS_RT_SENSORS
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -700,7 +581,7 @@ func GetSSDamageInfo() ([]Sensor, error) {
 func GetInventory() ([]InventoryItem, error) {
 	var unit InventoryItem
 	uList := make([]InventoryItem, 0)
-	rows, err := db.Query(`SELECT HEX(t.item_id), t.timestamp, t.QUANTITY,
+	rows, err := db.Query(`SELECT t.item_id, t.timestamp, t.QUANTITY,
 		 										t.RESTOCK_ORDER FROM INVENTORY
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM INVENTORY GROUP BY item_id) max
@@ -720,7 +601,7 @@ func GetInventory() ([]InventoryItem, error) {
 func GetPowerConsumers() ([]PowerConsumer, error) {
 	var unit PowerConsumer
 	uList := make([]PowerConsumer, 0)
-	rows, err := db.Query(`SELECT HEX(t.CONSUMER_ID), t.timestamp, t.POWER_CONS
+	rows, err := db.Query(`SELECT t.CONSUMER_id, t.timestamp, t.POWER_CONS
 												FROM  PWR_CONSUMPTION
 												t JOIN (SELECT MAX(timestamp) as timestamp
 												FROM PWR_CONSUMPTION GROUP BY CONSUMER_ID) max
@@ -740,7 +621,7 @@ func GetPowerConsumers() ([]PowerConsumer, error) {
 func GetSolarPanels() ([]SolarPanel, error) {
 	var unit SolarPanel
 	uList := make([]SolarPanel, 0)
-	rows, err := db.Query(`SELECT HEX(t.SOLAR_PANEL_ID), t.timestamp, t.SOLAR_PANEL_STATUS,
+	rows, err := db.Query(`SELECT t.SOLAR_PANEL_id, t.timestamp, t.SOLAR_PANEL_STATUS,
 		 										t.SOLAR_PANEL_EFFICIENCY, t.PANEL_X, t.PANEL_Y, t.PANEL_Z,
 												t.POWER_GEN, t.HEAT_GEN FROM PWR_GENERATION
 												t JOIN (SELECT MAX(timestamp) as timestamp
@@ -762,7 +643,7 @@ func GetSolarPanels() ([]SolarPanel, error) {
 func GetPwrHealthStates() ([]HealthState, error) {
 	var unit HealthState
 	uList := make([]HealthState, 0)
-	rows, err := db.Query(`SELECT HEX(t.OPERATIONUNIT_ID), t.timestamp, t.OPERATIONUNIT_HEALTHSTATE
+	rows, err := db.Query(`SELECT t.OPERATIONUNIT_id, t.timestamp, t.OPERATIONUNIT_HEALTHSTATE
 		 										FROM PWR_HEALTHSTATE
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM PWR_HEALTHSTATE GROUP BY OPERATIONUNIT_ID) max
@@ -782,7 +663,7 @@ func GetPwrHealthStates() ([]HealthState, error) {
 func GetBatteries() ([]Battery, error) {
 	var unit Battery
 	uList := make([]Battery, 0)
-	rows, err := db.Query(`SELECT HEX(t.BATTERY_ID), t.timestamp, t.BATTERY_STATUS,
+	rows, err := db.Query(`SELECT t.BATTERY_id, t.timestamp, t.BATTERY_STATUS,
 		 										t.BATTERY_EFFICIENCY, t.BATTERY_PERCENT, t.VOLTAGE
 												FROM PWR_STORAGE
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -803,7 +684,7 @@ func GetBatteries() ([]Battery, error) {
 func GetRobots() ([]Robot, error) {
 	var unit Robot
 	uList := make([]Robot, 0)
-	rows, err := db.Query(`SELECT HEX(t.ROBOT_ID), t.timestamp, t.ROBOT_STATUS,
+	rows, err := db.Query(`SELECT t.ROBOT_id, t.timestamp, t.ROBOT_STATUS,
 		 										t.ROBOT_HEALTH, t.BATTERY
 												FROM ROBOT_RT_UPDATES
 												t JOIN(SELECT MAX(timestamp) as timestamp
@@ -824,7 +705,7 @@ func GetRobots() ([]Robot, error) {
 func GetRobotInterventions() ([]RobotIntervention, error) {
 	var unit RobotIntervention
 	uList := make([]RobotIntervention, 0)
-	rows, err := db.Query(`SELECT HEX(t.SENDER_ID), t.timestamp, t.RECEIVER_ID,
+	rows, err := db.Query(`SELECT t.SENDER_id, t.timestamp, t.RECEIVER_ID,
 		 										t.INTERVENTION
 												FROM ROBOT_INTERVENTIONCTRL
 												t JOIN(SELECT MAX(timestamp) as timestamp

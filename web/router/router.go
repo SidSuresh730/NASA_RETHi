@@ -10,11 +10,14 @@ func SetRouter(app *sweetygo.SweetyGo) {
 	app.GET("/", controller.Index)
 	app.GET("/static/*files", controller.Static)
 
+	/* app.GET("/api/subsystem", controller.GetSubsystem) */ //																		NEED TO DO
+	/* app.GET("/api/:subsystem/:subsubsystem/", controller.GetSubsystemComponents) */ //					NEED TO DO
+	//app.GET("/api/:subsystem/:subsubsystem/:deviceID") 																					NEED TO DO
 	app.GET("/api/eclss/wrs", controller.GetWRSData) // ECLSS Water Recovery System
 	app.GET("/api/eclss/ogs", controller.GetOGSData) // ECLSS Oxygen Generation System
 	app.GET("/api/eclss/fms", controller.GetFMSData) // Food Management System
 	app.GET("/api/c2/decisions", controller.GetHMCtrlDecisions) // Health Management System Control Decisions // ERROR
-	app.GET("/api/c2/thermflux", controller.GetHMThermFlux) // Health Management Thermal Flux Sensors // ERROR
+	//app.GET("/api/c2/thermflux", controller.GetHMThermFlux) // Health Management Thermal Flux Sensors // ERROR
 	app.GET("/api/human/agents", controller.GetHumans) // Human Agents // ERROR
 	app.GET("/api/human/setpoints", controller.GetHumanSetPts) // Human Agent Set Point Data
 	app.GET("/api/interior/temperature", controller.GetIETemperatureSensors) // Interior Environment Temperature Sensors
@@ -26,7 +29,7 @@ func SetRouter(app *sweetygo.SweetyGo) {
 	app.GET("/api/structural/acceleration", controller.GetSSAcclSensors) // Structural System Acceleration Sensors
 	app.GET("/api/structural/displacement", controller.GetSSDispSensors) // Structural Systm Displacement Sensors
 	app.GET("/api/structural/damageinfo", controller.GetSSDamageInfo) // Structural System Damage Information
-	app.GET("/api/structural/visualassessment", controller.GetSSCameras) // Structural System Visual Assessment
+	//app.GET("/api/structural/visualassessment", controller.GetSSCameras) // Structural System Visual Assessment
 	app.GET("/api/robot/agents", controller.GetRobots) // Robot Agents
 	app.GET("/api/robot/interventions", controller.GetRobotInterventions) // Robot Interventions
 	app.GET("/api/power/powergeneration", controller.GetSolarPanels) // Power System Power Generation (Solar Panels)
