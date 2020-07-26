@@ -301,7 +301,7 @@ func GetWRSData() ([]ECLSSwrs, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
 												ON t.timestamp = max.timestamp
-												WHERE TYPE="WRS"
+												WHERE TYPE='WRS'
 												ORDER BY t.id `)
 	if err != nil {
 		return uList, err
@@ -325,7 +325,7 @@ func GetOGSData() ([]ECLSSogs, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
 												ON t.timestamp = max.timestamp
-												WHERE TYPE="OGS"
+												WHERE TYPE='OGS'
 												ORDER BY t.id `)
 	if err != nil {
 		return uList, err
@@ -349,7 +349,7 @@ func GetFMSData() ([]ECLSSfms, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM ECLSS_RT_OPERATION GROUP BY id) max
 												ON t.timestamp = max.timestamp
-												WHERE TYPE="FMS"
+												WHERE TYPE='FMS'
 												ORDER BY t.id `)
 	if err != nil {
 		return uList, err
@@ -476,7 +476,7 @@ func GetIETemperatureSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM IE_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "TEMP"
+												WHERE SENSOR_TYPE = 'TEMP'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -499,7 +499,7 @@ func GetSSTemperatureSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "TEMP"
+												WHERE SENSOR_TYPE = 'TEMP'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -522,7 +522,7 @@ func GetIEPressureSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM IE_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "PRESSURE"
+												WHERE SENSOR_TYPE = 'PRESSURE'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -545,7 +545,7 @@ func GetSSPressureSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "PRESSURE"
+												WHERE SENSOR_TYPE = 'PRESSURE'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -568,7 +568,7 @@ func GetSSStrainSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "Strain"
+												WHERE SENSOR_TYPE = 'Strain'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -591,7 +591,7 @@ func GetIEHumiditySensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM IE_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "HUMIDITY"
+												WHERE SENSOR_TYPE = 'HUMIDITY'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -614,7 +614,7 @@ func GetSSAcclSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "ACCL"
+												WHERE SENSOR_TYPE = 'ACCL'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -637,7 +637,7 @@ func GetSSDispSensors() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "DISP"
+												WHERE SENSOR_TYPE = 'DISP'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -660,7 +660,7 @@ func GetSSCameras() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "VISUAL"
+												WHERE SENSOR_TYPE = 'VISUAL'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
@@ -683,7 +683,7 @@ func GetSSDamageInfo() ([]Sensor, error) {
 												t JOIN(SELECT MAX(timestamp) as timestamp
 												FROM SS_RT_SENSORS GROUP BY sensor_id) max
 												ON t.timestamp = max.timestamp
-												WHERE SENSOR_TYPE = "DAMAGE"
+												WHERE SENSOR_TYPE = 'DAMAGE'
 												ORDER BY t.sensor_id`)
 	if err != nil {
 		return uList, err
