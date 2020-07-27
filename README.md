@@ -64,3 +64,12 @@ If running on a Windows machine without front end, use these paths to observe JS
 * /api/power/health
 * /api/inventory
 * /api/external/disturbances
+
+If the MySQL database is on a separate machine from the web server, modify **Line 17** of ~/model/model.go to ```dbAddr := fmt.Sprintf("<username>":%s@tcp(<IP>:3306)/mcvt", os.Getenv("DBPasswd"))``` where <username> is the username of the user you want to use to access the database and <IP> is the IP address of the machine running the MySQL server. Use the private IP if the web server and private server are in the same LAN. Otherwise use the public IP. Remember to change the value of **DBPasswd** to the password for the user, if different. 
+In the MySQL Workbench, execute the code 
+```
+    CREATE USER '<username>'@'%' IDENTIFIED BY '<password>'; 
+    GRANT ALL ON mcvt.* TO '<username>'@'%';
+```
+The '%' identifier is a placeholder for any IP. So any client can access the MySQL server with that username and password. 
+Alternatively, you can use the command line by entering the command ``` > mysql ``` and then executing the above queries. 
